@@ -1,0 +1,50 @@
+/* App.css */
+
+.App {
+  display: flex;
+  justify-content: center;
+  background-image: url('/Users/user/Downloads/PerfTask-main/perf-task/src/taskbg.jpg');
+  align-items: center;
+  height: 100vh;
+}
+
+.scoreboard {
+  font-weight: bold;
+  color: white;
+}
+
+.board {
+  position: relative;
+  width: 600px;
+  height: 400px;
+  background-color: black;
+}
+
+.paddle {
+  position: absolute;
+  width: 10px;
+  height: 80px;
+  background-color: white;
+}
+
+.ball {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: white;
+  border-radius: 50%;
+}
+
+.custom {
+    background-color: #57aae5; /* Blue */
+    border: none;
+    color: rgb(86, 5, 5);
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px;
+}
