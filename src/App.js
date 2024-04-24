@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
+// constants defining the dimensions & properties of the game board, paddles, and ball
 const BOARD_WIDTH = 600;
 const BOARD_HEIGHT = 400;
 const PADDLE_WIDTH = 10;
@@ -21,6 +22,7 @@ function App() {
   const [score2, setScore2] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
+  // handles keyboard input for paddle movement 
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'ArrowUp') {
@@ -41,29 +43,32 @@ function App() {
     };
   }, []);
 
+  // handles ball movement, collisions, and scoring
   useEffect(() => {
     const moveBall = setInterval(() => {
-      if (isPaused) return; // Pause game if paused
+      if (isPaused) return;
       const newBallX = ballX + ballSpeedX;
       const newBallY = ballY + ballSpeedY;
 
+      // check to make sure the ball is in bounds
       if (newBallY <= 0 || newBallY >= BOARD_HEIGHT - BALL_SIZE) {
         setBallSpeedY(prevSpeedY => -prevSpeedY);
       }
 
+      // handles scoring and pausing after scoring 
       if (newBallX <= 0) {
         setScore2(prevScore => prevScore + 1);
-        setIsPaused(true); // Pause game
+        setIsPaused(true); 
         setTimeout(() => {
           resetBall();
-          setIsPaused(false); // Resume game
+          setIsPaused(false); 
         }, PAUSE_TIME);
       } else if (newBallX >= BOARD_WIDTH - BALL_SIZE) {
         setScore1(prevScore => prevScore + 1);
-        setIsPaused(true); // Pause game
+        setIsPaused(true);
         setTimeout(() => {
           resetBall();
-          setIsPaused(false); // Resume game
+          setIsPaused(false); 
         }, PAUSE_TIME);
       } else if ((newBallX <= PADDLE_WIDTH && newBallY + BALL_SIZE >= paddle1Y && newBallY <= paddle1Y + PADDLE_HEIGHT) ||
                  (newBallX + BALL_SIZE >= BOARD_WIDTH - PADDLE_WIDTH && newBallY + BALL_SIZE >= paddle2Y && newBallY <= paddle2Y + PADDLE_HEIGHT)) {
@@ -77,14 +82,14 @@ function App() {
     return () => clearInterval(moveBall);
   }, [ballX, ballY, paddle1Y, paddle2Y, ballSpeedX, ballSpeedY, isPaused]);
 
-  const resetBall = () => {
+  const resetBall = () => { // resets the ball position
     setBallX(BOARD_WIDTH / 2 - BALL_SIZE / 2);
     setBallY(BOARD_HEIGHT / 2 - BALL_SIZE / 2);
     setBallSpeedX(BALL_SPEED);
     setBallSpeedY(BALL_SPEED);
   };
 
-  const resetGame = () => {
+  const resetGame = () => { // resets both players score counts 
     setScore1(0);
     setScore2(0);
     resetBall();
@@ -94,6 +99,7 @@ function App() {
     setIsPaused(prevPaused => !prevPaused);
   }
 
+  // renders the game components and scoreboard
   return (
     <div className="App">
       <div className="board">
