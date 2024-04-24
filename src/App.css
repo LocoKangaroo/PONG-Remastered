@@ -3,7 +3,7 @@
 .App {
   display: flex;
   justify-content: center;
-  background-image: url('/Users/user/Downloads/PerfTask-main/perf-task/src/taskbg.jpg');
+  background-image: url('../src/taskbg.jpg');
   align-items: center;
   height: 100vh;
 }
