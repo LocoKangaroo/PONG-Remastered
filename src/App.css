@@ -1,7 +1,7 @@
 .App {
   display: flex; /* displays the content as a flex container */
   justify-content: center; /* centers the content horizontally */
-  background-image: url('../src/taskbg-2.jpg');
+  background-image: url('../src/neon_bg.jpg');
   height: 100vh; /* sets content to 100% of the viewport height */
 }
 

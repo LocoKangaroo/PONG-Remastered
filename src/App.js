@@ -194,12 +194,17 @@ function App() {
     `"Better luck next time, ${loser}!"`,
     `"Is ${loser} even trying? 😜"`,
     `"It's okay ${loser}, losing builds character!"`,
-    `"Don't worry ${loser}, it's just a game!"`,
+    `"Don't worry ${loser}, it's just a game!"`, 
+    `"Looks like ${loser} should stick to knitting!"`,
+    `"Did ${loser} mistake this for a nap?"`,
+    `"Keep calm, ${loser}, it's not the end of the world... just the game."`,
+    `"Quick, someone give ${loser} a consolation cookie!"`,
+    `"You know ${loser}, they say practice makes... less terrible?"`,
+    `"Did ${loser} forget to turn on their game mode?"`,
+    `"Looks like ${loser} is having a bad hair day... in the game."`,
+    `"If at first you don't succeed, blame lag like ${loser} does."`,
+    `"Is ${loser} trying to set a record for most losses?"`,
   ];
-
-
-
-
 
   // randomly select a funny quote for the loser
   const randomQuote = funnyQuotes[Math.floor(Math.random() * funnyQuotes.length)];
