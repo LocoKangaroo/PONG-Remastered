@@ -15,6 +15,7 @@ var gameStatePaused = false; //game state for stoping the paddles from moving an
 var displayMessage = true; 
 var displayScore1 = false; 
 var displayScore2 = false; 
+var gameRestarted = false; 
 
 function App() {
   const [paddle1Y, setPaddle1Y] = useState(BOARD_HEIGHT / 2 - PADDLE_HEIGHT / 2);
@@ -126,6 +127,12 @@ function App() {
     resetBall();
     setPaddle1Y(BOARD_HEIGHT / 2 - PADDLE_HEIGHT / 2); 
     setPaddle2Y(BOARD_HEIGHT / 2 - PADDLE_HEIGHT / 2);
+    displayMessage = true; 
+    gameRestarted = true; 
+    setTimeout(function () {
+      displayMessage = false; 
+      gameRestarted = false; 
+    }, PAUSE_TIME);
   };
 
   const gameState = () => {
@@ -146,13 +153,14 @@ function App() {
     if (!isPaused){
       PADDLE_SPEED = 0;
       gameStatePaused = true; 
+      displayMessage = true; 
     } else if(isPaused){
       PADDLE_SPEED = 20;
       gameStatePaused = false; 
+      displayMessage = false;
     }
     setIsPaused(prevPaused => !prevPaused);
   };
-
 
   function player1Scored(){
     displayMessage = true; 
@@ -187,6 +195,7 @@ function App() {
 
 
 
+
   // randomly select a funny quote for the loser
   const randomQuote = funnyQuotes[Math.floor(Math.random() * funnyQuotes.length)];
 
@@ -215,7 +224,8 @@ function App() {
           <div className="output-print">
               {!displayMessage && <div>.</div>}
               {displayMessage && !gameStarted && <div>Press "Start Game" to Start</div>}
-              {(displayMessage && gameStatePaused) && <div>Game is Paused</div>}
+              {((displayMessage && gameStatePaused) && !gameRestarted )&& <div>Game is Paused</div>}
+              {displayMessage && gameRestarted && <div>Successfully Restarted!</div>}
               {displayMessage && displayScore1 && <div>Player 1 Scored!</div>}
               {displayMessage && displayScore2 && <div>Player 2 Scored!</div>}
               {displayMessage && gameOver && <div>Game Over!</div>}
