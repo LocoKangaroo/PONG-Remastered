@@ -7,7 +7,7 @@ const BOARD_HEIGHT = 457;
 const PADDLE_WIDTH = 20;
 const PADDLE_HEIGHT = 110;
 const BALL_SIZE = 20;
-var PADDLE_SPEED = 20; //variable PADDLE_SPEED allows us to either stop the paddles from moving while the game is paused
+var PADDLE_SPEED = 30; //variable PADDLE_SPEED allows us to either stop the paddles from moving while the game is paused
 const BALL_SPEED = 4;
 const PAUSE_TIME = 2500; // 1 second pause after scoring
 const MAX_SCORE = 5; // max score to end the game
@@ -57,60 +57,58 @@ function App() {
     if (!gameStarted || isPaused || gameOver) return;
 
     const moveBall = setInterval(() => {
-      const newBallX = ballX + ballSpeedX;
-      const newBallY = ballY + ballSpeedY;
+        const newBallX = ballX + ballSpeedX;
+        const newBallY = ballY + ballSpeedY;
 
-      // check to make sure the ball is in bounds
-      if (newBallY <= 0 || newBallY >= BOARD_HEIGHT - BALL_SIZE) {
-        setBallSpeedY(prevSpeedY => -prevSpeedY);
-      }
-
-      // handles scoring and pausing after scoring
-      if (newBallX <= 0) {
-        setScore2(prevScore => prevScore + 1);
-        if (score2 + 1 === MAX_SCORE) {
-          setGameOver(true);
-          gameState(); 
-
-        } else {
-          setIsPaused(true);
-          setTimeout(() => {
-            resetBall();
-            setIsPaused(false);
-          }, PAUSE_TIME);
-          player2Scored();
+        // check to make sure the ball is in bounds
+        if (newBallY <= 0 || newBallY >= BOARD_HEIGHT - BALL_SIZE) {
+            setBallSpeedY(prevSpeedY => -prevSpeedY);
         }
-      } else if (newBallX >= BOARD_WIDTH - BALL_SIZE) {
-        setScore1(prevScore => prevScore + 1);
-        if (score1 + 1 === MAX_SCORE) {
-          setGameOver(true);
-          gameState(); 
 
-        } else {
-          setIsPaused(true);
-          setTimeout(() => {
-            resetBall();
-            setIsPaused(false);
-          }, PAUSE_TIME);
-          player1Scored();
+        // handles scoring and pausing after scoring
+        if (newBallX <= 0 && !isPaused) { // Add !isPaused check
+            setScore2(prevScore => prevScore + 1);
+            if (score2 + 1 === MAX_SCORE) {
+                setGameOver(true);
+                gameState(); 
+            } else {
+                setIsPaused(true);
+                setTimeout(() => {
+                    resetBall();
+                    setIsPaused(false);
+                }, PAUSE_TIME);
+                player2Scored();
+            }
+        } else if (newBallX >= BOARD_WIDTH - BALL_SIZE && !isPaused) { // Add !isPaused check
+            setScore1(prevScore => prevScore + 1);
+            if (score1 + 1 === MAX_SCORE) {
+                setGameOver(true);
+                gameState(); 
+            } else {
+                setIsPaused(true);
+                setTimeout(() => {
+                    resetBall();
+                    setIsPaused(false);
+                }, PAUSE_TIME);
+                player1Scored();
+            }
+        } else if (
+            (newBallX <= PADDLE_WIDTH &&
+                newBallY + BALL_SIZE >= paddle1Y &&
+                newBallY <= paddle1Y + PADDLE_HEIGHT) ||
+            (newBallX + BALL_SIZE >= BOARD_WIDTH - PADDLE_WIDTH &&
+                newBallY + BALL_SIZE >= paddle2Y &&
+                newBallY <= paddle2Y + PADDLE_HEIGHT)
+        ) {
+            setBallSpeedX(prevSpeedX => -prevSpeedX);
         }
-      } else if (
-        (newBallX <= PADDLE_WIDTH &&
-          newBallY + BALL_SIZE >= paddle1Y &&
-          newBallY <= paddle1Y + PADDLE_HEIGHT) ||
-        (newBallX + BALL_SIZE >= BOARD_WIDTH - PADDLE_WIDTH &&
-          newBallY + BALL_SIZE >= paddle2Y &&
-          newBallY <= paddle2Y + PADDLE_HEIGHT)
-      ) {
-        setBallSpeedX(prevSpeedX => -prevSpeedX);
-      }
 
-      setBallX(newBallX);
-      setBallY(newBallY);
+        setBallX(newBallX);
+        setBallY(newBallY);
     }, 20);
 
     return () => clearInterval(moveBall);
-  }, [gameStarted, ballX, ballY, paddle1Y, paddle2Y, ballSpeedX, ballSpeedY, isPaused, gameOver, score1, score2]);
+}, [gameStarted, ballX, ballY, paddle1Y, paddle2Y, ballSpeedX, ballSpeedY, isPaused, gameOver, score1, score2]);
 
   const resetBall = () => {
     // resets the ball position
