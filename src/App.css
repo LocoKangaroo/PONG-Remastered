@@ -1,48 +1,97 @@
 .App {
   display: flex; /* displays the content as a flex container */
   justify-content: center; /* centers the content horizontally */
-  background-image: url('../src/taskbg.jpg');
-  align-items: center; /* centers the content vertically */
+  background-image: url('../src/taskbg-2.jpg');
   height: 100vh; /* sets content to 100% of the viewport height */
+}
+
+
+.vertical-elements {
+  display: flex;
+  align-items: center;
+}
+
+.title {
+  color: white; 
+  font-weight: bolder;
+  font-size: 65px;
+  align-items: center;
+  text-align: center;;
+
+}
+
+.output-print {
+  color: black;
+  font-weight: bold;
+  font-size: x-large;
+  background-color: white;
 }
 
 .scoreboard {
   font-weight: bold;
-  color: white;
+  color: black;
+  background-color: white;
+  padding: 3%;
+  margin: 1%;
+  border-radius: 30px;
+  font-size: 30px;
+  text-align: center;
 }
-
 .board {
   position: relative;
-  width: 600px;
-  height: 400px;
+  width: 722px;
+  height: 457px;
   background-color: black;
+  border: solid gray;
+  border-width: 1 1px;
+  background-image: url('../src/table.png');
+  background-position: 0; 
+  background-size: contain;
 }
 
 .paddle {
   position: absolute;
-  width: 10px;
-  height: 80px;
-  background-color: white;
+  width: 20px;
+  height: 110px;
+  background-color: red;
 }
 
 .ball {
   position: absolute;
-  width: 10px;
-  height: 10px;
-  background-color: white;
+  width: 20px;
+  height: 20px;
+  background-color: yellow;
   border-radius: 50%;
 }
 
+
+
 .custom {
-    background-color: #57aae5;
+    background-color: white;
     border: none; /* removes button border */
-    color: rgb(86, 5, 5);
-    padding: 10px 20px; 
+    color: black;
     text-align: center;
     text-decoration: none; /* removes underline from the text */
     display: inline-block;
     font-size: 16px;
-    margin: 4px 2px;
     cursor: pointer;
     border-radius: 8px; /* makes corners round */
+    padding: 6%;
+    margin: 1%; 
+    border-radius: 30px;
+
+}
+
+.custom:hover {
+  background-color: grey;
+  border: none; /* removes button border */
+  color: rgb(86, 5, 5);
+  text-align: center;
+  text-decoration: none; /* removes underline from the text */
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 8px; /* makes corners round */
+  padding: 6%;
+  margin: 1%; 
 }
