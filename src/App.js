@@ -12,7 +12,7 @@ const BALL_SPEED = 3;
 const PAUSE_TIME = 3000; // 1 second pause after scoring
 const MAX_SCORE = 3; // max score to end the game
 var gameStatePaused = false; //game state for stoping the paddles from moving and for an accurate output in the output div
-var displayMessage = false; 
+var displayMessage = true; 
 var displayScore1 = false; 
 var displayScore2 = false; 
 
@@ -68,6 +68,8 @@ function App() {
         setScore2(prevScore => prevScore + 1);
         if (score2 + 1 === MAX_SCORE) {
           setGameOver(true);
+          gameState(); 
+
         } else {
           setIsPaused(true);
           setTimeout(() => {
@@ -80,6 +82,8 @@ function App() {
         setScore1(prevScore => prevScore + 1);
         if (score1 + 1 === MAX_SCORE) {
           setGameOver(true);
+          gameState(); 
+
         } else {
           setIsPaused(true);
           setTimeout(() => {
@@ -124,9 +128,18 @@ function App() {
     setPaddle2Y(BOARD_HEIGHT / 2 - PADDLE_HEIGHT / 2);
   };
 
+  const gameState = () => {
+    if (gameOver = true) {
+      displayMessage = true; 
+    } else {
+      displayMessage = false; 
+    }
+  }
+
   const startGame = () => {
     // Start the game when the start button is clicked
     setGameStarted(true);
+    displayMessage = false; 
   };
 
   const pause = () => {
@@ -159,6 +172,7 @@ function App() {
     }, PAUSE_TIME)
   }
 
+  
   const loser = score1 < score2 ? 'Player 1' : 'Player 2';
 
   // array of funny quotes for the loser
@@ -183,66 +197,70 @@ function App() {
     return (
       <div className="App">
 
-        <div className="title">
-          PONG: Remastered
-         
-        </div>
+        <div className="all-elements">
 
-       
+          <div className="title">
+            PONG: Remastered
+          </div>
 
-        <div className="board">
-          <div className="paddle" style={{ top: paddle1Y, left: 0 }} />
-          <div className="paddle" style={{ top: paddle2Y, right: 0 }} />
-          <div className="ball" style={{ top: ballY, left: ballX }} />
-        </div>
+          <p></p>
+          <p></p>
 
-        <div className="vertical-elements">
-          <div className="scoreboard">
-            <div>Player 1: {score1}</div>
-            <div>Player 2: {score2}</div>
+          <div className="board">
+            <div className="paddle" style={{ top: paddle1Y, left: 0 }} />
+            <div className="paddle" style={{ top: paddle2Y, right: 0 }} />
+            <div className="ball" style={{ top: ballY, left: ballX }} />
+          </div>
+
+          <div className="output-print">
+              {!displayMessage && <div>.</div>}
+              {displayMessage && !gameStarted && <div>Press "Start Game" to Start</div>}
+              {(displayMessage && gameStatePaused) && <div>Game is Paused</div>}
+              {displayMessage && displayScore1 && <div>Player 1 Scored!</div>}
+              {displayMessage && displayScore2 && <div>Player 2 Scored!</div>}
+              {displayMessage && gameOver && <div>Game Over!</div>}
+              {displayMessage && gameOver && <div>{loser} is the loser!</div>}
+              {displayMessage && gameOver && <div>Funny Quote for the Loser:</div>}
+              {displayMessage && gameOver && <div>{randomQuote}</div>}
+          </div>
+
+          <p></p>
+          <p></p>
+
+          
+          <div className="vertical-elements">
+            <div className="scoreboard">
+              <div>Player 1: {score1}</div>
+              <div>Player 2: {score2}</div>
           </div>
 
 
-          {!gameStarted && !gameOver && (
-            <button className="custom" onClick={startGame}>
-              Start Game
-            </button>
+            {!gameStarted && !gameOver && (
+              <button className="custom" onClick={startGame}>
+                Start Game
+              </button>
+            )}
 
-          )}
+            {gameStarted && gameStatePaused && (
+              <button className="custom" onClick={pause}>
+                Resume
+              </button>
+            )}
+            
+            {gameStarted && !gameStatePaused && (
+              <button className="custom" onClick={pause}>
+                Pause
+              </button>
+            )}
 
-          {gameStarted && gameStatePaused && (
-            <button className="custom" onClick={pause}>
-              Resume
-            </button>
-          )}
-          
-          {gameStarted && !gameStatePaused && (
-            <button className="custom" onClick={pause}>
-              Pause
-            </button>
-          )}
+            {(gameOver || gameStatePaused )&& (
+              <button className="custom" onClick={resetGame}>
+                Restart
+              </button>
+            )}
 
-          {(gameOver || gameStatePaused )&& (
-            <button className="custom" onClick={resetGame}>
-              Restart
-            </button>
-          )}
-
-        </div>
-
-        
-          
-        <div className="output-print">
-            {!gameStarted && <div>Press "Start Game" to Start</div>}
-            {gameStatePaused && <div>Game is Paused</div>}
-            {displayMessage && displayScore1 && <div>Player 1 Scored!</div>}
-            {displayMessage && displayScore2 && <div>Player 2 Scored!</div>}
-            {gameOver && <div>Game Over!</div>}
-            {gameOver && <div>{loser} is the loser!</div>}
-            {gameOver && <div>Funny Quote for the Loser:</div>}
-            {gameOver && <div>{randomQuote}</div>}
-        </div>
-
+          </div>
+        </div> 
       </div>
     );
 }

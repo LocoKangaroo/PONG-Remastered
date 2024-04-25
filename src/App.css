@@ -1,23 +1,29 @@
 .App {
   display: flex; /* displays the content as a flex container */
-  /* justify-content: center; /* centers the content horizontally */
+  justify-content: center; /* centers the content horizontally */
   background-image: url('../src/taskbg.png');
-  /* align-items: center; /* centers the content vertically */
   height: 100vh; /* sets content to 100% of the viewport height */
-  white-space: pre-line;
+}
+
+
+.vertical-elements {
+  display: flex;
+  align-items: center;
 }
 
 .title {
   color: white; 
   font-weight: bolder;
   font-size: xx-large;
-  /*padding-left: 20%; 
-  padding-right: 20%;*/
+  padding-left: 20%; 
+  padding-right: 20%;
+  align-items: center;
 }
 
 .output-print {
   color: white;
   font-weight: bold;
+  font-size: x-large;
 }
 
 .scoreboard {
