@@ -9,7 +9,7 @@ const PADDLE_HEIGHT = 80;
 const BALL_SIZE = 10;
 var PADDLE_SPEED = 20; //variable PADDLE_SPEED allows us to either stop the paddles from moving while the game is paused
 const BALL_SPEED = 3;
-const PAUSE_TIME = 5000; // 1 second pause after scoring
+const PAUSE_TIME = 3000; // 1 second pause after scoring
 const MAX_SCORE = 3; // max score to end the game
 var gameStatePaused = false; //game state for stoping the paddles from moving and for an accurate output in the output div
 var displayMessage = false; 
@@ -171,7 +171,7 @@ function App() {
   ];
 
 
-  var Br = React.createClass({render() {return (<p>{"\n"}{"\n"}</p>)}})
+
 
   // randomly select a funny quote for the loser
   const randomQuote = funnyQuotes[Math.floor(Math.random() * funnyQuotes.length)];
@@ -185,7 +185,7 @@ function App() {
 
         <div className="title">
           PONG: Remastered
-          <p>{"\n"}</p>
+         
         </div>
 
        
@@ -230,7 +230,7 @@ function App() {
 
         </div>
 
-          <div>{Br}</div>
+        
           
         <div className="output-print">
             {!gameStarted && <div>Press "Start Game" to Start</div>}
