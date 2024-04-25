@@ -2,20 +2,21 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 
 // constants defining the dimensions & properties of the game board, paddles, and ball
-const BOARD_WIDTH = 600;
-const BOARD_HEIGHT = 400;
-const PADDLE_WIDTH = 10;
-const PADDLE_HEIGHT = 80;
-const BALL_SIZE = 10;
+const BOARD_WIDTH = 722;
+const BOARD_HEIGHT = 457;
+const PADDLE_WIDTH = 20;
+const PADDLE_HEIGHT = 110;
+const BALL_SIZE = 20;
 var PADDLE_SPEED = 20; //variable PADDLE_SPEED allows us to either stop the paddles from moving while the game is paused
-const BALL_SPEED = 3;
-const PAUSE_TIME = 3000; // 1 second pause after scoring
-const MAX_SCORE = 3; // max score to end the game
+const BALL_SPEED = 4;
+const PAUSE_TIME = 2500; // 1 second pause after scoring
+const MAX_SCORE = 5; // max score to end the game
 var gameStatePaused = false; //game state for stoping the paddles from moving and for an accurate output in the output div
 var displayMessage = true; 
 var displayScore1 = false; 
 var displayScore2 = false; 
 var gameRestarted = false; 
+
 
 function App() {
   const [paddle1Y, setPaddle1Y] = useState(BOARD_HEIGHT / 2 - PADDLE_HEIGHT / 2);
@@ -133,13 +134,16 @@ function App() {
       displayMessage = false; 
       gameRestarted = false; 
     }, PAUSE_TIME);
+    setIsPaused(false); 
+    gameStatePaused = false; 
+    PADDLE_SPEED = 20; 
   };
 
   const gameState = () => {
-    if (gameOver = true) {
-      displayMessage = true; 
-    } else {
+    if (gameOver) {
       displayMessage = false; 
+    } else if (!gameOver){
+      displayMessage = true; 
     }
   }
 
@@ -154,6 +158,7 @@ function App() {
       PADDLE_SPEED = 0;
       gameStatePaused = true; 
       displayMessage = true; 
+
     } else if(isPaused){
       PADDLE_SPEED = 20;
       gameStatePaused = false; 
@@ -215,6 +220,12 @@ function App() {
           <p></p>
           <p></p>
 
+          <div className="scoreboard">
+              <div>Player 1: [{score1}] Player 2: [{score2}]</div>
+          </div>
+
+          <p></p>
+
           <div className="board">
             <div className="paddle" style={{ top: paddle1Y, left: 0 }} />
             <div className="paddle" style={{ top: paddle2Y, right: 0 }} />
@@ -222,10 +233,10 @@ function App() {
           </div>
 
           <div className="output-print">
-              {!displayMessage && <div>.</div>}
+              {!displayMessage && <div>‎ </div>}
               {displayMessage && !gameStarted && <div>Press "Start Game" to Start</div>}
               {((displayMessage && gameStatePaused) && !gameRestarted )&& <div>Game is Paused</div>}
-              {displayMessage && gameRestarted && <div>Successfully Restarted!</div>}
+              {((displayMessage && gameRestarted ) && !(displayScore1 || displayScore2))&& <div>Successfully Restarted!</div>}
               {displayMessage && displayScore1 && <div>Player 1 Scored!</div>}
               {displayMessage && displayScore2 && <div>Player 2 Scored!</div>}
               {displayMessage && gameOver && <div>Game Over!</div>}
@@ -239,10 +250,7 @@ function App() {
 
           
           <div className="vertical-elements">
-            <div className="scoreboard">
-              <div>Player 1: {score1}</div>
-              <div>Player 2: {score2}</div>
-          </div>
+            
 
 
             {!gameStarted && !gameOver && (
