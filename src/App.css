@@ -1,21 +1,39 @@
 .App {
   display: flex; /* displays the content as a flex container */
-  justify-content: center; /* centers the content horizontally */
-  background-image: url('../src/taskbg.jpg');
-  align-items: center; /* centers the content vertically */
+  /* justify-content: center; /* centers the content horizontally */
+  background-image: url('../src/taskbg.png');
+  /* align-items: center; /* centers the content vertically */
   height: 100vh; /* sets content to 100% of the viewport height */
+  white-space: pre-line;
+}
+
+.title {
+  color: white; 
+  font-weight: bolder;
+  font-size: xx-large;
+  /*padding-left: 20%; 
+  padding-right: 20%;*/
+}
+
+.output-print {
+  color: white;
+  font-weight: bold;
 }
 
 .scoreboard {
   font-weight: bold;
-  color: white;
+  color: black;
+  background-color: white;
+  padding: 5%;
+  margin: 1%;
 }
-
 .board {
   position: relative;
   width: 600px;
   height: 400px;
   background-color: black;
+  border: solid gray;
+  border-width: 1 1px;
 }
 
 .paddle {
@@ -33,10 +51,12 @@
   border-radius: 50%;
 }
 
+
+
 .custom {
-    background-color: #57aae5;
+    background-color: white;
     border: none; /* removes button border */
-    color: rgb(86, 5, 5);
+    color: black;
     padding: 10px 20px; 
     text-align: center;
     text-decoration: none; /* removes underline from the text */
@@ -45,4 +65,18 @@
     margin: 4px 2px;
     cursor: pointer;
     border-radius: 8px; /* makes corners round */
+}
+
+.custom:hover {
+  background-color: grey;
+  border: none; /* removes button border */
+  color: rgb(86, 5, 5);
+  padding: 10px 20px; 
+  text-align: center;
+  text-decoration: none; /* removes underline from the text */
+  display: inline-block;
+  font-size: 17px;
+  margin: 3px 1px;
+  cursor: pointer;
+  border-radius: 8px; /* makes corners round */
 }

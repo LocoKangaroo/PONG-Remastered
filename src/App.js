@@ -7,10 +7,14 @@ const BOARD_HEIGHT = 400;
 const PADDLE_WIDTH = 10;
 const PADDLE_HEIGHT = 80;
 const BALL_SIZE = 10;
-const PADDLE_SPEED = 20;
+var PADDLE_SPEED = 20; //variable PADDLE_SPEED allows us to either stop the paddles from moving while the game is paused
 const BALL_SPEED = 3;
-const PAUSE_TIME = 1000; // 1 second pause after scoring
+const PAUSE_TIME = 5000; // 1 second pause after scoring
 const MAX_SCORE = 3; // max score to end the game
+var gameStatePaused = false; //game state for stoping the paddles from moving and for an accurate output in the output div
+var displayMessage = false; 
+var displayScore1 = false; 
+var displayScore2 = false; 
 
 function App() {
   const [paddle1Y, setPaddle1Y] = useState(BOARD_HEIGHT / 2 - PADDLE_HEIGHT / 2);
@@ -70,6 +74,7 @@ function App() {
             resetBall();
             setIsPaused(false);
           }, PAUSE_TIME);
+          player2Scored();
         }
       } else if (newBallX >= BOARD_WIDTH - BALL_SIZE) {
         setScore1(prevScore => prevScore + 1);
@@ -81,6 +86,7 @@ function App() {
             resetBall();
             setIsPaused(false);
           }, PAUSE_TIME);
+          player1Scored();
         }
       } else if (
         (newBallX <= PADDLE_WIDTH &&
@@ -114,6 +120,8 @@ function App() {
     setScore2(0);
     setGameOver(false); // Reset game over status
     resetBall();
+    setPaddle1Y(BOARD_HEIGHT / 2 - PADDLE_HEIGHT / 2); 
+    setPaddle2Y(BOARD_HEIGHT / 2 - PADDLE_HEIGHT / 2);
   };
 
   const startGame = () => {
@@ -122,8 +130,34 @@ function App() {
   };
 
   const pause = () => {
+    if (!isPaused){
+      PADDLE_SPEED = 0;
+      gameStatePaused = true; 
+    } else if(isPaused){
+      PADDLE_SPEED = 20;
+      gameStatePaused = false; 
+    }
     setIsPaused(prevPaused => !prevPaused);
   };
+
+
+  function player1Scored(){
+    displayMessage = true; 
+    displayScore1 = true; 
+    setTimeout(function () {
+      displayMessage = false; 
+      displayScore1 = false; 
+    }, PAUSE_TIME); 
+  }
+
+  function player2Scored() {
+    displayMessage = true; 
+    displayScore2 = true; 
+    setTimeout(function () {
+      displayMessage = false; 
+      displayScore2 = false; 
+    }, PAUSE_TIME)
+  }
 
   const loser = score1 < score2 ? 'Player 1' : 'Player 2';
 
@@ -136,42 +170,81 @@ function App() {
     `"Don't worry ${loser}, it's just a game!"`,
   ];
 
+
+  var Br = React.createClass({render() {return (<p>{"\n"}{"\n"}</p>)}})
+
   // randomly select a funny quote for the loser
   const randomQuote = funnyQuotes[Math.floor(Math.random() * funnyQuotes.length)];
 
+
+
   // renders the game components and scoreboard
-  return (
-    <div className="App">
-      {!gameStarted && !gameOver && (
-        <button className="custom" onClick={startGame}>
-          Start Game
-        </button>
-      )}
-      <div className="board">
-        <div className="paddle" style={{ top: paddle1Y, left: 0 }} />
-        <div className="paddle" style={{ top: paddle2Y, right: 0 }} />
-        <div className="ball" style={{ top: ballY, left: ballX }} />
+
+    return (
+      <div className="App">
+
+        <div className="title">
+          PONG: Remastered
+          <p>{"\n"}</p>
+        </div>
+
+       
+
+        <div className="board">
+          <div className="paddle" style={{ top: paddle1Y, left: 0 }} />
+          <div className="paddle" style={{ top: paddle2Y, right: 0 }} />
+          <div className="ball" style={{ top: ballY, left: ballX }} />
+        </div>
+
+        <div className="vertical-elements">
+          <div className="scoreboard">
+            <div>Player 1: {score1}</div>
+            <div>Player 2: {score2}</div>
+          </div>
+
+
+          {!gameStarted && !gameOver && (
+            <button className="custom" onClick={startGame}>
+              Start Game
+            </button>
+
+          )}
+
+          {gameStarted && gameStatePaused && (
+            <button className="custom" onClick={pause}>
+              Resume
+            </button>
+          )}
+          
+          {gameStarted && !gameStatePaused && (
+            <button className="custom" onClick={pause}>
+              Pause
+            </button>
+          )}
+
+          {(gameOver || gameStatePaused )&& (
+            <button className="custom" onClick={resetGame}>
+              Restart
+            </button>
+          )}
+
+        </div>
+
+          <div>{Br}</div>
+          
+        <div className="output-print">
+            {!gameStarted && <div>Press "Start Game" to Start</div>}
+            {gameStatePaused && <div>Game is Paused</div>}
+            {displayMessage && displayScore1 && <div>Player 1 Scored!</div>}
+            {displayMessage && displayScore2 && <div>Player 2 Scored!</div>}
+            {gameOver && <div>Game Over!</div>}
+            {gameOver && <div>{loser} is the loser!</div>}
+            {gameOver && <div>Funny Quote for the Loser:</div>}
+            {gameOver && <div>{randomQuote}</div>}
+        </div>
+
       </div>
-      <div className="scoreboard">
-        <div>Player 1: {score1}</div>
-        <div>Player 2: {score2}</div>
-        {gameOver && <div>Game Over!</div>}
-        {gameOver && <div>{loser} is the loser!</div>}
-        {gameOver && <div>Funny Quote for the Loser:</div>}
-        {gameOver && <div>{randomQuote}</div>}
-      </div>
-      {gameOver && (
-        <button className="custom" onClick={resetGame}>
-          Restart Game
-        </button>
-      )}
-      {gameStarted && (
-        <button className="custom" onClick={pause}>
-          Pause/Unpause
-        </button>
-      )}
-    </div>
-  );
+    );
 }
 
 export default App;
