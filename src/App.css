@@ -25,6 +25,8 @@
   font-weight: bold;
   font-size: x-large;
   background-color: white;
+  text-wrap: wrap;
+  text-align: center;
 }
 
 .scoreboard {
