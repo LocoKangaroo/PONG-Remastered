@@ -1,11 +1,18 @@
 .App {
   display: flex; /* displays the content as a flex container */
   justify-content: center; /* centers the content horizontally */
-  background-image: url('../src/backgrounds/neon_bg.jpg');
+  background-image: url('../src/backgrounds/taskbg-3.jpg');
   background-size: cover;
   height: 100vh; /* sets content to 100% of the viewport height */
 }
 
+.App2 {
+  display: flex; /* displays the content as a flex container */
+  justify-content: center; /* centers the content horizontally */
+  background-image: url('../src/backgrounds/taskbg-2.jpg');
+  background-size: cover;
+  height: 100vh; /* sets content to 100% of the viewport height */
+}
 
 .vertical-elements {
   display: flex;
@@ -77,9 +84,10 @@
     font-size: 16px;
     cursor: pointer;
     border-radius: 8px; /* makes corners round */
-    padding: 6%;
+    padding: 5%;
     margin: 1%; 
     border-radius: 30px;
+    text-wrap:nowrap;
 
 }
 
@@ -93,6 +101,8 @@
   font-size: 16px;
   cursor: pointer;
   border-radius: 8px; /* makes corners round */
-  padding: 6%;
+  padding: 5%;
   margin: 1%; 
+  border-radius: 30px; 
+  text-wrap:nowrap;
 }

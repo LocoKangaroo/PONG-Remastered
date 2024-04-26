@@ -16,7 +16,6 @@ const MAX_SCORE = 5; // max score to end the game
 var loser = ""; 
 
 
-
 function App() {
   const [paddle1Y, setPaddle1Y] = useState(BOARD_HEIGHT / 2 - PADDLE_HEIGHT / 2);
   const [paddle2Y, setPaddle2Y] = useState(BOARD_HEIGHT / 2 - PADDLE_HEIGHT / 2);
@@ -27,6 +26,7 @@ function App() {
   const [score1, setScore1] = useState(0);
   const [score2, setScore2] = useState(0); 
   const [gameState, setGameState] = useState("pending");  
+  const [appName, setAppName] = useState("App");
 
   useEffect(() => { 
     if (gameState != "running") {return}; // don't run if game hasn't started
@@ -162,6 +162,14 @@ function App() {
         }
     }
 
+    function changeBackground(){
+      if(appName == "App"){
+        setAppName("App2");
+      } else if(appName == "App2"){
+        setAppName("App");
+      }
+    }
+
   // array of funny quotes for the loser
   const funnyQuotes = [
     `"Looks like ${loser} needs more practice!"`,
@@ -195,7 +203,7 @@ function App() {
   // renders the game components and scoreboard
 
     return (
-      <div className="App">
+      <div className= {appName}>
 
         <div className="all-elements">
 
@@ -255,9 +263,14 @@ function App() {
             </button>
           )}
 
-          <button className="custom" onClick={debug}>
+          {((gameState == "paused") || (gameState == "pending") || (gameState == "over")) && (
+            <button className= "custom" onClick={changeBackground}>
+              Change Background
+            </button>
+          )}
+          {/* <button className="custom" onClick={debug}>
             DEBUG
-          </button> 
+          </button>  */}
          
         </div>
           
