@@ -65,17 +65,17 @@ function App() {
         // handles scoring and pausing after scoring
         if (newBallX <= 0 && (gameState == "running")) { // Add !isPaused check
             setScore2(prevScore => prevScore + 1);
-            if (score2 + 1 === MAX_SCORE) {
+            if (score1 + 1 === MAX_SCORE) {
               gameOver();
             } else {
-                player2Scored(); 
+                player1Scored(); 
             }
         } else if (newBallX >= BOARD_WIDTH - BALL_SIZE && (gameState == "running")) { // Add !isPaused check
             setScore1(prevScore => prevScore + 1);
-            if (score1 + 1 === MAX_SCORE) {
+            if (score2 + 1 === MAX_SCORE) {
                 gameOver();
             } else {
-                player1Scored(); 
+                player2Scored(); 
             }
         } else if (
             (newBallX <= PADDLE_WIDTH &&
@@ -215,7 +215,8 @@ function App() {
           <p></p>
 
           <div className="scoreboard">
-              <div>Player 1: [{score1}] Player 2: [{score2}]</div>
+              <div>SCORE</div>
+              <div>{score1} : {score2}</div>
           </div>
 
           <p></p>
@@ -268,9 +269,7 @@ function App() {
               Change Background
             </button>
           )}
-          {/* <button className="custom" onClick={debug}>
-            DEBUG
-          </button>  */}
+          
          
         </div>
           

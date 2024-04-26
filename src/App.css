@@ -2,7 +2,7 @@
   display: flex; /* displays the content as a flex container */
   justify-content: center; /* centers the content horizontally */
   background-image: url('../src/backgrounds/taskbg-3.jpg');
-  background-size: cover;
+  background-size: 200vh 100vh;
   height: 100vh; /* sets content to 100% of the viewport height */
 }
 
@@ -10,7 +10,7 @@
   display: flex; /* displays the content as a flex container */
   justify-content: center; /* centers the content horizontally */
   background-image: url('../src/backgrounds/taskbg-2.jpg');
-  background-size: cover;
+  background-size: auto;
   height: 100vh; /* sets content to 100% of the viewport height */
 }
 
