@@ -16,6 +16,7 @@ const MAX_SCORE = 5; // max score to end the game
 var loser = ""; 
 
 
+
 function App() {
   const [paddle1Y, setPaddle1Y] = useState(BOARD_HEIGHT / 2 - PADDLE_HEIGHT / 2);
   const [paddle2Y, setPaddle2Y] = useState(BOARD_HEIGHT / 2 - PADDLE_HEIGHT / 2);
@@ -28,9 +29,7 @@ function App() {
   const [gameState, setGameState] = useState("pending");  
 
   useEffect(() => { 
-
-
-    if (gameState != "running") return; // don't run if game hasn't started
+    if (gameState != "running") {return}; // don't run if game hasn't started
 
     const handleKeyDown = (e) => {
       if (e.key === 'ArrowUp') {
@@ -52,7 +51,7 @@ function App() {
   }, [gameState]);
 
   useEffect(() => {
-    if (gameState != "running") return;
+    if (gameState != "running") {return};
 
     const moveBall = setInterval(() => {
         const newBallX = ballX + ballSpeedX;
@@ -101,18 +100,18 @@ function App() {
 }, [gameState, ballX, ballY, paddle1Y, paddle2Y, ballSpeedX, ballSpeedY, score1, score2]);
 
 
+
+    function startGame() {
+      // Start the game when the start button is clicked
+      setGameState("running"); 
+    }
+
     function resetBall() {
       setBallX(BALL_START_X);
       setBallY(BALL_START_Y);
       setBallSpeedX(BALL_SPEED);
       setBallSpeedY(BALL_SPEED);
       PADDLE_SPEED = 30; 
-    }
-
-    const startGame = () =>{
-      // Start the game when the start button is clicked
-      const temp = ["running"];
-      setGameState(temp); 
     }
 
     function player1Scored(){    
@@ -221,7 +220,7 @@ function App() {
 
           <div className="output-print">
               {(gameState == "running") && <div>‎ </div>}
-              {(gameState == "")&& <div>Press "Start Game" to Start</div>}
+              {(gameState == "pending")&& <div>Click on "Start Game" to Start</div>}
               {(gameState == "paused") && <div>Game is Paused</div>}
               {(gameState == "player-1-scored") && <div>Player 1 Scored!</div>}
               {(gameState == "player-2-scored") && <div>Player 2 Scored!</div>}
@@ -233,7 +232,7 @@ function App() {
           <div className="vertical-elements">
           
           {(gameState == "pending") && (
-            <button className="custom" onClick={startGame()}>
+            <button className="custom" onClick={startGame}>
               Start Game
             </button>
           )}
@@ -255,11 +254,11 @@ function App() {
               Restart
             </button>
           )}
-    
-         {/*  <button className="custom" onClick={debug}>
+
+          <button className="custom" onClick={debug}>
             DEBUG
-          </button> */}
-        
+          </button> 
+         
         </div>
           
         </div> 
