@@ -1,7 +1,8 @@
 .App {
   display: flex; /* displays the content as a flex container */
   justify-content: center; /* centers the content horizontally */
-  background-image: url('../src/neon_bg.jpg');
+  background-image: url('../src/backgrounds/neon_bg.jpg');
+  background-size: cover;
   height: 100vh; /* sets content to 100% of the viewport height */
 }
 
@@ -25,6 +26,8 @@
   font-weight: bold;
   font-size: x-large;
   background-color: white;
+  text-wrap: wrap;
+  text-align: center;
 }
 
 .scoreboard {
@@ -42,7 +45,7 @@
   width: 722px;
   height: 457px;
   background-color: black;
-  background-image: url('../src/table.png');
+  background-image: url('../src//backgrounds/table.png');
   background-position: 0; 
   background-size: contain;
 }

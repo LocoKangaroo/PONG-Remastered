@@ -13,6 +13,7 @@ var PADDLE_SPEED = 30; //variable PADDLE_SPEED allows us to either stop the padd
 var BALL_SPEED = 5;
 const PAUSE_TIME = 2500; // 1 second pause after scoring
 const MAX_SCORE = 5; // max score to end the game
+var loser = ""; 
 
 
 function App() {
@@ -155,6 +156,11 @@ function App() {
     function gameOver(){
         setGameState("over");  
         resetBall(); 
+        if(score1 > score2){
+          loser = "Player 2";
+        } else {
+          loser = "Player 1"; 
+        }
     }
 
   // array of funny quotes for the loser
@@ -221,7 +227,7 @@ function App() {
               {(gameState == "player-2-scored") && <div>Player 2 Scored!</div>}
               {(gameState == "over") && <div>Game Over!</div>}
               {(gameState == "over") && <div>{loser} is the loser!</div>}
-              {(gameState == "over") && <div>Funny Quote for the Loser: {randomQuote}</div>}
+              {(gameState == "over") && <div>{randomQuote}</div>}
           </div>
 
           <div className="vertical-elements">
