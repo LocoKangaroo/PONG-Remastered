@@ -8,12 +8,13 @@ const PADDLE_WIDTH = 20;
 const PADDLE_HEIGHT = 110;
 const BALL_SIZE = 19;
 const BALL_START_X = (BOARD_WIDTH / 2 - BALL_SIZE / 2);
-const BALL_START_Y = (BOARD_HEIGHT / 2 - BALL_SIZE / 2); 
-var PADDLE_SPEED = 30; //variable PADDLE_SPEED allows us to either stop the paddles from moving while the game is paused
+const BALL_START_Y = (BOARD_HEIGHT / 2 - BALL_SIZE / 2);
+var PADDLE_SPEED = 20;//variable PADDLE_SPEED allows us to either stop the paddles from moving while the game is paused
 var BALL_SPEED = 5;
-const PAUSE_TIME = 2500; // 1 second pause after scoring
-const MAX_SCORE = 5; // max score to end the game
-var loser = ""; 
+const PAUSE_TIME = 2500;// 1 second pause after scoring
+const MAX_SCORE = 2;// max score to end the game
+var loser = "";
+var computerState = false; 
 
 
 function App() {
@@ -24,59 +25,72 @@ function App() {
   const [ballSpeedX, setBallSpeedX] = useState(BALL_SPEED);
   const [ballSpeedY, setBallSpeedY] = useState(BALL_SPEED);
   const [score1, setScore1] = useState(0);
-  const [score2, setScore2] = useState(0); 
-  const [gameState, setGameState] = useState("pending");  
+  const [score2, setScore2] = useState(0);
+  const [gameState, setGameState] = useState("pending");
   const [appName, setAppName] = useState("App");
+  const [computerState, setComputerState] = useState(false); 
 
   useEffect(() => { 
-    if (gameState != "running") {return}; // don't run if game hasn't started
+    if (gameState != "running") {return};// don't run if game hasn't started
 
     const handleKeyDown = (e) => {
       if (e.key === 'ArrowUp') {
         setPaddle2Y(prevY => Math.max(prevY - PADDLE_SPEED, 0));
       } else if (e.key === 'ArrowDown') {
         setPaddle2Y(prevY => Math.min(prevY + PADDLE_SPEED, BOARD_HEIGHT - PADDLE_HEIGHT));
-      } else if (e.key === 'w') {
-        setPaddle1Y(prevY => Math.max(prevY - PADDLE_SPEED, 0));
-      } else if (e.key === 's') {
-        setPaddle1Y(prevY => Math.min(prevY + PADDLE_SPEED, BOARD_HEIGHT - PADDLE_HEIGHT));
+      }  else if (!computerState){ 
+        if (e.key === 'w') {
+          setPaddle1Y(prevY => Math.max(prevY - PADDLE_SPEED, 0));
+        } else if (e.key === 's') {
+          setPaddle1Y(prevY => Math.min(prevY + PADDLE_SPEED, BOARD_HEIGHT - PADDLE_HEIGHT));
+        }  
       } 
     };
 
     document.addEventListener('keydown', handleKeyDown);
 
+  
+
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [gameState]);
+  }, [gameState, computerState]);
 
   useEffect(() => {
-    if (gameState != "running") {return};
+   if (gameState != "running") {return};
+
+   if (computerState){
+    if (ballY < (paddle2Y + PADDLE_HEIGHT/ 2)){
+      setTimeout(setPaddle1Y(prevY => Math.max(prevY - PADDLE_SPEED, 0)), 100)
+    } else if (ballY > (paddle2Y + PADDLE_HEIGHT/2)){
+      setTimeout(setPaddle1Y(prevY => Math.min(prevY + PADDLE_SPEED, BOARD_HEIGHT - PADDLE_HEIGHT)), 100)
+    }      
+  }
 
     const moveBall = setInterval(() => {
         const newBallX = ballX + ballSpeedX;
-        const newBallY = ballY + ballSpeedY;
+        const  newBallY = ballY + ballSpeedY;
 
         // check to make sure the ball is in bounds
         if (newBallY <= 0 || newBallY >= BOARD_HEIGHT - BALL_SIZE) {
-            setBallSpeedY(prevSpeedY => -prevSpeedY);            
+            setBallSpeedY(prevSpeedY => -prevSpeedY);
         }
 
         // handles scoring and pausing after scoring
-        if (newBallX <= 0 && (gameState == "running")) { // Add !isPaused check
+        if (newBallX <= 0 && (gameState == "running")) { // Add gameState == "running" check
             setScore2(prevScore => prevScore + 1);
-            if (score1 + 1 === MAX_SCORE) {
+            if (score2 + 1 === MAX_SCORE) {
               gameOver();
             } else {
-                player1Scored(); 
+                player2Scored();
             }
-        } else if (newBallX >= BOARD_WIDTH - BALL_SIZE && (gameState == "running")) { // Add !isPaused check
-            setScore1(prevScore => prevScore + 1);
-            if (score2 + 1 === MAX_SCORE) {
-                gameOver();
-            } else {
-                player2Scored(); 
-            }
+        } else if (newBallX >= BOARD_WIDTH - BALL_SIZE && (gameState == "running")) { // Add gameState == "running" check
+          setScore1(prevScore => prevScore + 1);
+          if (score1 + 1 === MAX_SCORE) {
+              gameOver();
+          } else {
+              player1Scored();
+          }
         } else if (
             (newBallX <= PADDLE_WIDTH &&
                 newBallY + BALL_SIZE >= paddle1Y &&
@@ -88,87 +102,106 @@ function App() {
             setBallSpeedX(prevSpeedX => -prevSpeedX);
             setBallSpeedX(prevSpeedX => prevSpeedX * 1.1);
             setBallSpeedY(prevSpeedY => prevSpeedY * 1.1);
-            PADDLE_SPEED = PADDLE_SPEED * 1.1;            
+            PADDLE_SPEED = PADDLE_SPEED * 1.1; 
         }
           
 
         setBallX(newBallX);
-        setBallY(newBallY);
-    }, 20);
+        setBallY(newBallY);       
+  }, 20);
 
-    return () => clearInterval(moveBall);
-}, [gameState, ballX, ballY, paddle1Y, paddle2Y, ballSpeedX, ballSpeedY, score1, score2]);
+    
 
+  return () => clearInterval(moveBall); 
+  
+}, [gameState, ballX, ballY, paddle1Y, paddle2Y, ballSpeedX, ballSpeedY, score1, score2, computerState]);
 
+  function startGame() {
+    // Start the game when the start button is clicked
+    setGameState("running");
+  }
 
-    function startGame() {
-      // Start the game when the start button is clicked
-      setGameState("running"); 
+  function resetBall() {
+    setBallX(BALL_START_X);
+    setBallY(BALL_START_Y);
+    setBallSpeedX(BALL_SPEED);
+    setBallSpeedY(BALL_SPEED);
+    PADDLE_SPEED = 20;
+  }
+
+  function player1Scored(){    
+    setGameState("player-1-scored");
+    setTimeout(function () {
+      resetBall();
+      setGameState("running");
+    }, PAUSE_TIME);
+  }
+
+  function player2Scored() {
+    setGameState("player-2-scored");
+    setTimeout(function () {
+      resetBall();
+      setGameState("running");
+    }, PAUSE_TIME);
+  }
+
+  function pause() {
+    if (gameState != "paused"){
+      PADDLE_SPEED = 0;
+      setGameState("paused");
+    } else {
+      PADDLE_SPEED = 20;
+      setGameState("running");
     }
+  }
 
-    function resetBall() {
-      setBallX(BALL_START_X);
-      setBallY(BALL_START_Y);
-      setBallSpeedX(BALL_SPEED);
-      setBallSpeedY(BALL_SPEED);
-      PADDLE_SPEED = 30; 
-    }
-
-    function player1Scored(){    
-      setGameState("player-1-scored"); 
-      setTimeout(function () {
-        resetBall(); 
-        setGameState("running");  
-      }, PAUSE_TIME); 
-    }
-
-    function player2Scored() {
-      setGameState("player-2-scored"); 
-      setTimeout(function () {
-        resetBall(); 
-        setGameState("running");  
-      }, PAUSE_TIME); 
-    }
-
-    function pause() {
-      if (gameState != "paused"){
-        PADDLE_SPEED = 0;
-        setGameState("paused");  
-      } else {
-        PADDLE_SPEED = 30;
-        setGameState("running");
-      }
-    }
-
-    function resetGame() {
-      // resets all components
-      setGameState("pending"); 
-      setScore1(0);
-      setScore2(0);
-      resetBall(); 
-      setPaddle1Y(BOARD_HEIGHT / 2 - PADDLE_HEIGHT / 2); 
-      setPaddle2Y(BOARD_HEIGHT / 2 - PADDLE_HEIGHT / 2);
-      PADDLE_SPEED = 30; 
-    };
+  function resetGame() {
+    // resets all components
+    setGameState("pending");
+    setScore1(0);
+    setScore2(0);
+    resetBall();
+    setPaddle1Y(BOARD_HEIGHT / 2 - PADDLE_HEIGHT / 2);
+    setPaddle2Y(BOARD_HEIGHT / 2 - PADDLE_HEIGHT / 2);
+    PADDLE_SPEED = 20;
+  };
 
 
-    function gameOver(){
-        setGameState("over");  
-        resetBall(); 
+  function gameOver(){
+      setGameState("over");
+      resetBall();
+      if (computerState){
         if(score1 > score2){
-          loser = "Player 2";
-        } else {
-          loser = "Player 1"; 
+          loser = "Player 1";
+        } else if (score1 < score2){
+          loser = "Computer"
         }
-    }
-
-    function changeBackground(){
-      if(appName == "App"){
-        setAppName("App2");
-      } else if(appName == "App2"){
-        setAppName("App");
+      } else if (!computerState) {
+        if(score1 > score2){
+          loser = "Player 1";
+        } else if (score1 < score2){
+          loser = "Player 2"
+        }
       }
+  }
+
+  function changeBackground(){
+    if(appName == "App"){
+      setAppName("App2");
+    } else if(appName == "App2"){
+      setAppName("App");
     }
+  }
+
+  function changeGameAI(){
+    if(computerState){
+      setComputerState(false);  
+      resetGame();
+    } else if (!computerState){
+      setComputerState(true); 
+      resetGame(); 
+    }
+  }
 
   // array of funny quotes for the loser
   const funnyQuotes = [
@@ -194,9 +227,8 @@ function App() {
     function debug() {
       console.log(
           gameState + "\n" + 
-          ballSpeedX  + "\n" + 
-          ballSpeedY
-      ); 
+          computerState
+      );
     }
 
 
@@ -231,8 +263,9 @@ function App() {
               {(gameState == "running") && <div>‎ </div>}
               {(gameState == "pending")&& <div>Click on "Start Game" to Start</div>}
               {(gameState == "paused") && <div>Game is Paused</div>}
-              {(gameState == "player-1-scored") && <div>Player 1 Scored!</div>}
-              {(gameState == "player-2-scored") && <div>Player 2 Scored!</div>}
+              {(gameState == "player-2-scored") && <div>Player 1 Scored!</div>}
+              {((gameState == "player-1-scored") && !computerState) && <div>Player 2 Scored!</div>}
+              {((gameState == "player-1-scored") && computerState) && <div>The Computer Scored!</div>}
               {(gameState == "over") && <div>Game Over!</div>}
               {(gameState == "over") && <div>{loser} is the loser!</div>}
               {(gameState == "over") && <div>{randomQuote}</div>}
@@ -263,12 +296,28 @@ function App() {
               Restart
             </button>
           )}
+          
+          {(!computerState && ((gameState != "player-1-scored") && (gameState != "player-2-scored")))&&(
+            <button className="custom" onClick={changeGameAI}>
+              Player vs. AI
+            </button>
+          )}
+
+          {(computerState && ((gameState != "player-1-scored") && (gameState != "player-2-scored")))&&(
+            <button className="custom" onClick={changeGameAI}>
+              Player vs. Player
+            </button>
+          )}
 
           {((gameState == "paused") || (gameState == "pending") || (gameState == "over")) && (
             <button className= "custom" onClick={changeBackground}>
               Change Background
             </button>
           )}
+
+       {/*    <button className='custom' onClick={debug}>
+            debug
+          </button> */}
           
          
         </div>
