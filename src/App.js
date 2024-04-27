@@ -12,7 +12,7 @@ const BALL_START_Y = (BOARD_HEIGHT / 2 - BALL_SIZE / 2);
 var PADDLE_SPEED = 20;//variable PADDLE_SPEED allows us to either stop the paddles from moving while the game is paused
 var BALL_SPEED = 5;
 const PAUSE_TIME = 2500;// 1 second pause after scoring
-const MAX_SCORE = 2;// max score to end the game
+const MAX_SCORE = 3;// max score to end the game
 var loser = "";
 var computerState = false; 
 
@@ -189,6 +189,15 @@ function App() {
     if(appName == "App"){
       setAppName("App2");
     } else if(appName == "App2"){
+      setAppName("App3");
+    }
+    else if (appName == "App3") {
+      setAppName("App4");
+    }
+    else if (appName == "App4") {
+      setAppName("App5");
+    }
+    else {
       setAppName("App");
     }
   }
@@ -224,14 +233,6 @@ function App() {
   // randomly select a funny quote for the loser
   const randomQuote = funnyQuotes[Math.floor(Math.random() * funnyQuotes.length)];
 
-    function debug() {
-      console.log(
-          gameState + "\n" + 
-          computerState
-      );
-    }
-
-
   // renders the game components and scoreboard
 
     return (
@@ -266,8 +267,7 @@ function App() {
               {(gameState == "player-2-scored") && <div>Player 1 Scored!</div>}
               {((gameState == "player-1-scored") && !computerState) && <div>Player 2 Scored!</div>}
               {((gameState == "player-1-scored") && computerState) && <div>The Computer Scored!</div>}
-              {(gameState == "over") && <div>Game Over!</div>}
-              {(gameState == "over") && <div>{loser} is the loser!</div>}
+              {(gameState == "over") && <div>Game Over! {loser} is the loser! </div>}
               {(gameState == "over") && <div>{randomQuote}</div>}
           </div>
 
@@ -314,10 +314,6 @@ function App() {
               Change Background
             </button>
           )}
-
-       {/*    <button className='custom' onClick={debug}>
-            debug
-          </button> */}
           
          
         </div>

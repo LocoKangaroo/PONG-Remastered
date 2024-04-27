@@ -1,8 +1,9 @@
 .App {
   display: flex; /* displays the content as a flex container */
   justify-content: center; /* centers the content horizontally */
-  background-image: url('../src/backgrounds/taskbg-3.jpg');
-  background-size: 200vh 100vh;
+  background-image: url('../src/backgrounds/taskbg-1.jpg');
+  background-size: auto;
+  background-position: center;
   height: 100vh; /* sets content to 100% of the viewport height */
 }
 
@@ -13,6 +14,34 @@
   background-size: auto;
   height: 100vh; /* sets content to 100% of the viewport height */
 }
+
+.App3 {
+  display: flex; /* displays the content as a flex container */
+  justify-content: center; /* centers the content horizontally */
+  background-image: url('../src/backgrounds/taskbg-3.jpg');
+  background-size: auto;
+  height: 100vh; /* sets content to 100% of the viewport height */
+}
+
+
+.App4 {
+  display: flex; /* displays the content as a flex container */
+  justify-content: center; /* centers the content horizontally */
+  background-image: url('../src/backgrounds/taskbg-4.jpg');
+  background-size: auto;
+  height: 100vh; /* sets content to 100% of the viewport height */
+}
+
+
+.App5 {
+  display: flex; /* displays the content as a flex container */
+  justify-content: center; /* centers the content horizontally */
+  background-image: url('../src/backgrounds/taskbg-5.jpg');
+  background-size: auto;
+  height: 100vh; /* sets content to 100% of the viewport height */
+}
+
+
 
 .vertical-elements {
   display: flex;
@@ -41,7 +70,7 @@
   font-weight: bold;
   color: black;
   background-color: white;
-  padding: 3%;
+  padding: 1%;
   margin: 1%;
   border-radius: 30px;
   font-size: 30px;
