@@ -12,7 +12,7 @@ const BALL_START_Y = (BOARD_HEIGHT / 2 - BALL_SIZE / 2);
 var PADDLE_SPEED = 20;//variable PADDLE_SPEED allows us to either stop the paddles from moving while the game is paused
 var BALL_SPEED = 5;
 const PAUSE_TIME = 2500;// 1 second pause after scoring
-const MAX_SCORE = 2;// max score to end the game
+const MAX_SCORE = 3;// max score to end the game
 var loser = "";
 var computerState = false; 
 
@@ -214,6 +214,15 @@ function App() {
     if(appName == "App"){
       setAppName("App2");
     } else if(appName == "App2"){
+      setAppName("App3");
+    }
+    else if (appName == "App3") {
+      setAppName("App4");
+    }
+    else if (appName == "App4") {
+      setAppName("App5");
+    }
+    else {
       setAppName("App");
     }
 
@@ -283,17 +292,16 @@ function App() {
           <div className="ball" style={{ top: ballY, left: ballX }} />
         </div>
 
-        <div className="output-print">
-            {(gameState == "running") && <div>‎ </div>}
-            {(gameState == "pending")&& <div>Click on "Start Game" to Start</div>}
-            {(gameState == "paused") && <div>Game is Paused</div>}
-            {(gameState == "player-2-scored") && <div>Player 1 Scored!</div>}
-            {((gameState == "player-1-scored") && !computerState) && <div>Player 2 Scored!</div>}
-            {((gameState == "player-1-scored") && computerState) && <div>The Computer Scored!</div>}
-            {(gameState == "over") && <div>Game Over!</div>}
-            {(gameState == "over") && <div>{loser} is the loser!</div>}
-            {(gameState == "over") && <div>{randomQuote}</div>}
-        </div>
+          <div className="output-print">
+              {(gameState == "running") && <div>‎ </div>}
+              {(gameState == "pending")&& <div>Click on "Start Game" to Start</div>}
+              {(gameState == "paused") && <div>Game is Paused</div>}
+              {(gameState == "player-2-scored") && <div>Player 1 Scored!</div>}
+              {((gameState == "player-1-scored") && !computerState) && <div>Player 2 Scored!</div>}
+              {((gameState == "player-1-scored") && computerState) && <div>The Computer Scored!</div>}
+              {(gameState == "over") && <div>Game Over! {loser} is the loser! </div>}
+              {(gameState == "over") && <div>{randomQuote}</div>}
+          </div>
 
         <div className="vertical-elements">
         
@@ -333,13 +341,13 @@ function App() {
           </button>
         )}
 
-        {((gameState == "paused") || (gameState == "pending") || (gameState == "over")) && (
-          <button className= "custom" onClick={changeBackground}>
-            Change Background
-          </button>
-        )}
-
-
+          {((gameState == "paused") || (gameState == "pending") || (gameState == "over")) && (
+            <button className= "custom" onClick={changeBackground}>
+              Change Background
+            </button>
+          )}
+          
+         
         </div>
       </div> 
     </div>
