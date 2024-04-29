@@ -18,6 +18,7 @@ var computerState = false;
 
 
 function App() {
+
   const [paddle1Y, setPaddle1Y] = useState(BOARD_HEIGHT / 2 - PADDLE_HEIGHT / 2);
   const [paddle2Y, setPaddle2Y] = useState(BOARD_HEIGHT / 2 - PADDLE_HEIGHT / 2);
   const [ballX, setBallX] = useState(BALL_START_X);
@@ -31,6 +32,7 @@ function App() {
   const [computerState, setComputerState] = useState(false); 
 
   useEffect(() => { 
+
     if (gameState != "running") {return};// don't run if game hasn't started
 
     const handleKeyDown = (e) => {
@@ -49,24 +51,23 @@ function App() {
 
     document.addEventListener('keydown', handleKeyDown);
 
-  
-
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
+
   }, [gameState, computerState]);
 
   useEffect(() => {
    if (gameState != "running") {return};
 
-   if (computerState){
-    if (ballY < (paddle2Y + PADDLE_HEIGHT/ 2)){
-      setTimeout(setPaddle1Y(prevY => Math.max(prevY - PADDLE_SPEED, 0)), 100)
-    } else if (ballY > (paddle2Y + PADDLE_HEIGHT/2)){
-      setTimeout(setPaddle1Y(prevY => Math.min(prevY + PADDLE_SPEED, BOARD_HEIGHT - PADDLE_HEIGHT)), 100)
-    }      
-  }
-
+    if (computerState){
+      if (ballY < (paddle2Y + PADDLE_HEIGHT/ 2)){
+        setTimeout(setPaddle1Y(prevY => Math.max(prevY - PADDLE_SPEED, 0)), 100)
+      } else if (ballY > (paddle2Y + PADDLE_HEIGHT/2)){
+        setTimeout(setPaddle1Y(prevY => Math.min(prevY + PADDLE_SPEED, BOARD_HEIGHT - PADDLE_HEIGHT)), 100)
+      }      
+    }
+ 
     const moveBall = setInterval(() => {
         const newBallX = ballX + ballSpeedX;
         const  newBallY = ballY + ballSpeedY;
@@ -78,19 +79,27 @@ function App() {
 
         // handles scoring and pausing after scoring
         if (newBallX <= 0 && (gameState == "running")) { // Add gameState == "running" check
-            setScore2(prevScore => prevScore + 1);
+            
+          setScore2(prevScore => prevScore + 1);
             if (score2 + 1 === MAX_SCORE) {
               gameOver();
             } else {
                 player2Scored();
             }
+
         } else if (newBallX >= BOARD_WIDTH - BALL_SIZE && (gameState == "running")) { // Add gameState == "running" check
+          
           setScore1(prevScore => prevScore + 1);
           if (score1 + 1 === MAX_SCORE) {
-              gameOver();
+              
+            gameOver();
+
           } else {
-              player1Scored();
+              
+            player1Scored();
+
           }
+        
         } else if (
             (newBallX <= PADDLE_WIDTH &&
                 newBallY + BALL_SIZE >= paddle1Y &&
@@ -99,18 +108,18 @@ function App() {
                 newBallY + BALL_SIZE >= paddle2Y &&
                 newBallY <= paddle2Y + PADDLE_HEIGHT)
         ) {
-            setBallSpeedX(prevSpeedX => -prevSpeedX);
-            setBallSpeedX(prevSpeedX => prevSpeedX * 1.1);
-            setBallSpeedY(prevSpeedY => prevSpeedY * 1.1);
-            PADDLE_SPEED = PADDLE_SPEED * 1.1; 
-        }
-          
+            
+          setBallSpeedX(prevSpeedX => -prevSpeedX);
+          setBallSpeedX(prevSpeedX => prevSpeedX * 1.1);
+          setBallSpeedY(prevSpeedY => prevSpeedY * 1.1);
+          PADDLE_SPEED = PADDLE_SPEED * 1.1; 
 
+        }
+    
         setBallX(newBallX);
         setBallY(newBallY);       
-  }, 20);
 
-    
+  }, 20);
 
   return () => clearInterval(moveBall); 
   
@@ -122,30 +131,37 @@ function App() {
   }
 
   function resetBall() {
+
     setBallX(BALL_START_X);
     setBallY(BALL_START_Y);
     setBallSpeedX(BALL_SPEED);
     setBallSpeedY(BALL_SPEED);
     PADDLE_SPEED = 20;
+
   }
 
   function player1Scored(){    
+
     setGameState("player-1-scored");
     setTimeout(function () {
       resetBall();
       setGameState("running");
     }, PAUSE_TIME);
+
   }
 
   function player2Scored() {
+
     setGameState("player-2-scored");
     setTimeout(function () {
       resetBall();
       setGameState("running");
     }, PAUSE_TIME);
+
   }
 
   function pause() {
+
     if (gameState != "paused"){
       PADDLE_SPEED = 0;
       setGameState("paused");
@@ -153,9 +169,11 @@ function App() {
       PADDLE_SPEED = 20;
       setGameState("running");
     }
+
   }
 
   function resetGame() {
+    
     // resets all components
     setGameState("pending");
     setScore1(0);
@@ -164,43 +182,57 @@ function App() {
     setPaddle1Y(BOARD_HEIGHT / 2 - PADDLE_HEIGHT / 2);
     setPaddle2Y(BOARD_HEIGHT / 2 - PADDLE_HEIGHT / 2);
     PADDLE_SPEED = 20;
+
   };
 
 
   function gameOver(){
-      setGameState("over");
-      resetBall();
-      if (computerState){
-        if(score1 > score2){
-          loser = "Player 1";
-        } else if (score1 < score2){
-          loser = "Computer"
-        }
-      } else if (!computerState) {
-        if(score1 > score2){
-          loser = "Player 1";
-        } else if (score1 < score2){
-          loser = "Player 2"
-        }
+
+    setGameState("over");
+    resetBall();
+    if (computerState){
+
+      if(score1 > score2){
+        loser = "Player 1";
+      } else if (score1 < score2){
+        loser = "Computer"
       }
+
+    } else if (!computerState) {
+
+      if(score1 > score2){
+        loser = "Player 1";
+      } else if (score1 < score2){
+        loser = "Player 2"
+      }
+
+    }
   }
 
   function changeBackground(){
+
     if(appName == "App"){
       setAppName("App2");
     } else if(appName == "App2"){
       setAppName("App");
     }
+
   }
 
   function changeGameAI(){
+
     if(computerState){
+
       setComputerState(false);  
       resetGame();
+
     } else if (!computerState){
+
       setComputerState(true); 
       resetGame(); 
+      
     }
+
   }
 
   // array of funny quotes for the loser
@@ -224,106 +256,94 @@ function App() {
   // randomly select a funny quote for the loser
   const randomQuote = funnyQuotes[Math.floor(Math.random() * funnyQuotes.length)];
 
-    function debug() {
-      console.log(
-          gameState + "\n" + 
-          computerState
-      );
-    }
-
-
   // renders the game components and scoreboard
 
-    return (
-      <div className= {appName}>
+  return (
+    <div className= {appName}>
 
-        <div className="all-elements">
+      <div className="all-elements">
 
-          <div className="title">
-            PONG: Remastered
-          </div>
-
-          <p></p>
-          <p></p>
-
-          <div className="scoreboard">
-              <div>SCORE</div>
-              <div>{score1} : {score2}</div>
-          </div>
-
-          <p></p>
-
-          <div className="board">
-            <div className="paddle" style={{ top: paddle1Y, left: 0 }} />
-            <div className="paddle" style={{ top: paddle2Y, right: 0 }} />
-            <div className="ball" style={{ top: ballY, left: ballX }} />
-          </div>
-
-          <div className="output-print">
-              {(gameState == "running") && <div>‎ </div>}
-              {(gameState == "pending")&& <div>Click on "Start Game" to Start</div>}
-              {(gameState == "paused") && <div>Game is Paused</div>}
-              {(gameState == "player-2-scored") && <div>Player 1 Scored!</div>}
-              {((gameState == "player-1-scored") && !computerState) && <div>Player 2 Scored!</div>}
-              {((gameState == "player-1-scored") && computerState) && <div>The Computer Scored!</div>}
-              {(gameState == "over") && <div>Game Over!</div>}
-              {(gameState == "over") && <div>{loser} is the loser!</div>}
-              {(gameState == "over") && <div>{randomQuote}</div>}
-          </div>
-
-          <div className="vertical-elements">
-          
-          {(gameState == "pending") && (
-            <button className="custom" onClick={startGame}>
-              Start Game
-            </button>
-          )}
-    
-          {((gameState == "paused") && ((gameState != "player-1-scored") || (gameState == "player-2-scored"))) &&  (
-            <button className="custom" onClick={pause}>
-              Resume
-            </button>
-          )}
-          
-          {(gameState == "running") && (
-            <button className="custom" onClick={pause}>
-              Pause
-            </button>
-          )}
-    
-          {(((gameState == "paused") || (gameState == "over")) && ((gameState != "player-1-scored") || (gameState == "player-2-scored"))) && (
-            <button className="custom" onClick={resetGame}>
-              Restart
-            </button>
-          )}
-          
-          {(!computerState && ((gameState != "player-1-scored") && (gameState != "player-2-scored")))&&(
-            <button className="custom" onClick={changeGameAI}>
-              Player vs. AI
-            </button>
-          )}
-
-          {(computerState && ((gameState != "player-1-scored") && (gameState != "player-2-scored")))&&(
-            <button className="custom" onClick={changeGameAI}>
-              Player vs. Player
-            </button>
-          )}
-
-          {((gameState == "paused") || (gameState == "pending") || (gameState == "over")) && (
-            <button className= "custom" onClick={changeBackground}>
-              Change Background
-            </button>
-          )}
-
-       {/*    <button className='custom' onClick={debug}>
-            debug
-          </button> */}
-          
-         
+        <div className="title">
+          PONG: Remastered
         </div>
-          
-        </div> 
-      </div>
-    );
+
+        <p></p>
+        <p></p>
+
+        <div className="scoreboard">
+            <div>SCORE</div>
+            <div>{score1} : {score2}</div>
+        </div>
+
+        <p></p>
+
+        <div className="board">
+          <div className="paddle" style={{ top: paddle1Y, left: 0 }} />
+          <div className="paddle" style={{ top: paddle2Y, right: 0 }} />
+          <div className="ball" style={{ top: ballY, left: ballX }} />
+        </div>
+
+        <div className="output-print">
+            {(gameState == "running") && <div>‎ </div>}
+            {(gameState == "pending")&& <div>Click on "Start Game" to Start</div>}
+            {(gameState == "paused") && <div>Game is Paused</div>}
+            {(gameState == "player-2-scored") && <div>Player 1 Scored!</div>}
+            {((gameState == "player-1-scored") && !computerState) && <div>Player 2 Scored!</div>}
+            {((gameState == "player-1-scored") && computerState) && <div>The Computer Scored!</div>}
+            {(gameState == "over") && <div>Game Over!</div>}
+            {(gameState == "over") && <div>{loser} is the loser!</div>}
+            {(gameState == "over") && <div>{randomQuote}</div>}
+        </div>
+
+        <div className="vertical-elements">
+        
+        {(gameState == "pending") && (
+          <button className="custom" onClick={startGame}>
+            Start Game
+          </button>
+        )}
+  
+        {((gameState == "paused") && ((gameState != "player-1-scored") || (gameState == "player-2-scored"))) &&  (
+          <button className="custom" onClick={pause}>
+            Resume
+          </button>
+        )}
+        
+        {(gameState == "running") && (
+          <button className="custom" onClick={pause}>
+            Pause
+          </button>
+        )}
+  
+        {(((gameState == "paused") || (gameState == "over")) && ((gameState != "player-1-scored") || (gameState == "player-2-scored"))) && (
+          <button className="custom" onClick={resetGame}>
+            Restart
+          </button>
+        )}
+        
+        {(!computerState && ((gameState != "player-1-scored") && (gameState != "player-2-scored")))&&(
+          <button className="custom" onClick={changeGameAI}>
+            Player vs. AI
+          </button>
+        )}
+
+        {(computerState && ((gameState != "player-1-scored") && (gameState != "player-2-scored")))&&(
+          <button className="custom" onClick={changeGameAI}>
+            Player vs. Player
+          </button>
+        )}
+
+        {((gameState == "paused") || (gameState == "pending") || (gameState == "over")) && (
+          <button className= "custom" onClick={changeBackground}>
+            Change Background
+          </button>
+        )}
+
+
+        </div>
+      </div> 
+    </div>
+  );
 }
+
 export default App;
