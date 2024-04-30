@@ -43,11 +43,13 @@
   height: 100vh; /* sets content to 100% of the viewport height */
 }
 
+/* sets all the buttons to be alligned */
 .vertical-elements {
   display: flex;
   align-items: center;
 }
 
+/* the propoerties of the title at the very top */
 .title {
   color: black; 
   font-weight: bolder;
@@ -58,6 +60,7 @@
   border-radius: 30px; 
 }
 
+/* the properties of the output that is underneath the game board */
 .output-print {
   color: black;
   font-weight: bold;
@@ -67,6 +70,7 @@
   text-align: center;
 }
 
+/* the properties of the scoreboard below the title */
 .scoreboard {
   font-weight: bold;
   color: black;
@@ -77,6 +81,8 @@
   font-size: 30px;
   text-align: center;
 }
+
+/* the properties of the actual game board */
 .board {
   position: relative;
   width: 722px;
@@ -87,6 +93,7 @@
   background-size: contain;
 }
 
+/* the properties of the paddles */
 .paddle {
   position: absolute;
   width: 20px;
@@ -94,6 +101,7 @@
   background-color: red;
 }
 
+/* the properties of the ball */
 .ball {
   position: absolute;
   width: 20px;
@@ -119,16 +127,17 @@
 
 }
 
+/* the butons change properties when someone is hovering over themn with their mouse */
 .custom:hover {
   background-color: grey;
-  border: none; /* removes button border */
+  border: none; 
   color: rgb(86, 5, 5);
   text-align: center;
-  text-decoration: none; /* removes underline from the text */
+  text-decoration: none; 
   display: inline-block;
   font-size: 16px;
   cursor: pointer;
-  border-radius: 8px; /* makes corners round */
+  border-radius: 8px; 
   padding: 5%;
   margin: 1%; 
   border-radius: 30px; 

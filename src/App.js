@@ -9,16 +9,17 @@ const PADDLE_HEIGHT = 110;
 const BALL_SIZE = 19;
 const BALL_START_X = (BOARD_WIDTH / 2 - BALL_SIZE / 2);
 const BALL_START_Y = (BOARD_HEIGHT / 2 - BALL_SIZE / 2);
-var PADDLE_SPEED = 20;//variable PADDLE_SPEED allows us to either stop the paddles from moving while the game is paused
 var BALL_SPEED = 5;
-const PAUSE_TIME = 2500;// 1 second pause after scoring
+var PADDLE_SPEED = 20;// variable PADDLE_SPEED allows us to either stop the paddles from moving while the game is paused
+const PAUSE_TIME = 2500; // 1 second pause after scoring
 const MAX_SCORE = 3;// max score to end the game
-var loser = "";
-var computerState = false; 
+var loser = ""; // variable for storing the 
+var computerState = false; // hold the value for if the computer is playing or if another player is
 
 
 function App() {
 
+  // useState constants for monitoring any changes to the state, which will then trigger the useEffect and re-render the screen
   const [paddle1Y, setPaddle1Y] = useState(BOARD_HEIGHT / 2 - PADDLE_HEIGHT / 2);
   const [paddle2Y, setPaddle2Y] = useState(BOARD_HEIGHT / 2 - PADDLE_HEIGHT / 2);
   const [ballX, setBallX] = useState(BALL_START_X);
@@ -31,16 +32,19 @@ function App() {
   const [appName, setAppName] = useState("App");
   const [computerState, setComputerState] = useState(false); 
 
+
+  // whenever the gameState or the computerState changes, the program will check if it should start listening for the keyboard inputs or not
   useEffect(() => { 
 
     if (gameState != "running") {return};// don't run if game hasn't started
 
+    // listens to the keyboard inputs and determines what to do
     const handleKeyDown = (e) => {
       if (e.key === 'ArrowUp') {
         setPaddle2Y(prevY => Math.max(prevY - PADDLE_SPEED, 0));
       } else if (e.key === 'ArrowDown') {
         setPaddle2Y(prevY => Math.min(prevY + PADDLE_SPEED, BOARD_HEIGHT - PADDLE_HEIGHT));
-      }  else if (!computerState){ 
+      }  else if (!computerState){ // if another player is playing, monitor these inputs, otherwise ignore
         if (e.key === 'w') {
           setPaddle1Y(prevY => Math.max(prevY - PADDLE_SPEED, 0));
         } else if (e.key === 's') {
@@ -57,9 +61,12 @@ function App() {
 
   }, [gameState, computerState]);
 
+  // this useEffect holds the logic for the game, which calculates the where the ball should be and what speed along with the paddles
+  // every time a crucial variable has changed states, the program will calculate the correct speeds and locations and re-render/update them
   useEffect(() => {
    if (gameState != "running") {return};
 
+   // logic for when the computer is playing. If the ball is above the paddle, it will move until the ball is within the height of the paddle and vice versa 
     if (computerState){
       if (ballY < (paddle2Y + PADDLE_HEIGHT/ 2)){
         setTimeout(setPaddle1Y(prevY => Math.max(prevY - PADDLE_SPEED, 0)), 100)
@@ -68,6 +75,7 @@ function App() {
       }      
     }
  
+    // calculates the speed and location of the ball
     const moveBall = setInterval(() => {
         const newBallX = ballX + ballSpeedX;
         const  newBallY = ballY + ballSpeedY;
@@ -91,13 +99,9 @@ function App() {
           
           setScore1(prevScore => prevScore + 1);
           if (score1 + 1 === MAX_SCORE) {
-              
             gameOver();
-
           } else {
-              
             player1Scored();
-
           }
         
         } else if (
@@ -109,6 +113,7 @@ function App() {
                 newBallY <= paddle2Y + PADDLE_HEIGHT)
         ) {
             
+          // every time the ball hits the paddle, all components move slightly faster
           setBallSpeedX(prevSpeedX => -prevSpeedX);
           setBallSpeedX(prevSpeedX => prevSpeedX * 1.1);
           setBallSpeedY(prevSpeedY => prevSpeedY * 1.1);
@@ -131,7 +136,7 @@ function App() {
   }
 
   function resetBall() {
-
+    //resets the location of the ball
     setBallX(BALL_START_X);
     setBallY(BALL_START_Y);
     setBallSpeedX(BALL_SPEED);
@@ -141,7 +146,7 @@ function App() {
   }
 
   function player1Scored(){    
-
+    // allows the output under the board to display who scored and resets the ball while pausing the game for a previosuly specificed amount
     setGameState("player-1-scored");
     setTimeout(function () {
       resetBall();
@@ -151,7 +156,7 @@ function App() {
   }
 
   function player2Scored() {
-
+    // allows the output under the board to display who scored and resets the ball while pausing the game for a previosuly specificed amount
     setGameState("player-2-scored");
     setTimeout(function () {
       resetBall();
@@ -161,7 +166,7 @@ function App() {
   }
 
   function pause() {
-
+    // if the game is paused, it will unpause the game and vice versa
     if (gameState != "paused"){
       PADDLE_SPEED = 0;
       setGameState("paused");
@@ -173,8 +178,7 @@ function App() {
   }
 
   function resetGame() {
-    
-    // resets all components
+    // resets all components of the game
     setGameState("pending");
     setScore1(0);
     setScore2(0);
@@ -187,30 +191,26 @@ function App() {
 
 
   function gameOver(){
-
+    // resets the components of the game and sets it so that the output will display the loser and a funny quote for the loser
     setGameState("over");
     resetBall();
     if (computerState){
-
       if(score1 > score2){
         loser = "Player 1";
       } else if (score1 < score2){
         loser = "Computer"
       }
-
     } else if (!computerState) {
-
       if(score1 > score2){
         loser = "Player 1";
       } else if (score1 < score2){
         loser = "Player 2"
       }
-
     }
   }
 
   function changeBackground(){
-
+    // cycles through the various backgrounds
     if(appName == "App"){
       setAppName("App2");
     } else if(appName == "App2"){
@@ -229,19 +229,14 @@ function App() {
   }
 
   function changeGameAI(){
-
+    // toggles the game ai
     if(computerState){
-
       setComputerState(false);  
       resetGame();
-
     } else if (!computerState){
-
       setComputerState(true); 
       resetGame(); 
-      
     }
-
   }
 
   // array of funny quotes for the loser
@@ -266,7 +261,7 @@ function App() {
   const randomQuote = funnyQuotes[Math.floor(Math.random() * funnyQuotes.length)];
 
   // renders the game components and scoreboard
-
+  // the layout of the entire UI
   return (
     <div className= {appName}>
 
