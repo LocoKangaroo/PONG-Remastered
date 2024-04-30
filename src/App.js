@@ -90,7 +90,7 @@ function App() {
             
           setScore2(prevScore => prevScore + 1);
             if (score2 + 1 === MAX_SCORE) {
-              gameOver();
+              gameOver(score1, score2);
             } else {
                 player2Scored();
             }
@@ -99,7 +99,7 @@ function App() {
           
           setScore1(prevScore => prevScore + 1);
           if (score1 + 1 === MAX_SCORE) {
-            gameOver();
+            gameOver(score1, score2);
           } else {
             player1Scored();
           }
@@ -112,12 +112,19 @@ function App() {
                 newBallY + BALL_SIZE >= paddle2Y &&
                 newBallY <= paddle2Y + PADDLE_HEIGHT)
         ) {
-            
+          
+          /*
+          The Following was done by: Rishin Kumar
+          ============================================
+           */
           // every time the ball hits the paddle, all components move slightly faster
           setBallSpeedX(prevSpeedX => -prevSpeedX);
           setBallSpeedX(prevSpeedX => prevSpeedX * 1.1);
           setBallSpeedY(prevSpeedY => prevSpeedY * 1.1);
           PADDLE_SPEED = PADDLE_SPEED * 1.1; 
+          /*
+          ============================================
+          */
 
         }
     
@@ -129,6 +136,11 @@ function App() {
   return () => clearInterval(moveBall); 
   
 }, [gameState, ballX, ballY, paddle1Y, paddle2Y, ballSpeedX, ballSpeedY, score1, score2, computerState]);
+
+ /*
+  The Following was done by: Rishin Kumar
+  ============================================
+  */
 
   function startGame() {
     // Start the game when the start button is clicked
@@ -190,20 +202,20 @@ function App() {
   };
 
 
-  function gameOver(){
+  function gameOver(s1, s2){
     // resets the components of the game and sets it so that the output will display the loser and a funny quote for the loser
     setGameState("over");
     resetBall();
     if (computerState){
-      if(score1 > score2){
+      if(s1 > s2){
         loser = "Player 1";
-      } else if (score1 < score2){
+      } else if (s1 < s2){
         loser = "Computer"
       }
     } else if (!computerState) {
-      if(score1 > score2){
+      if(s1 > s2){
         loser = "Player 1";
-      } else if (score1 < score2){
+      } else if (s1 < s2){
         loser = "Player 2"
       }
     }
@@ -225,7 +237,6 @@ function App() {
     else {
       setAppName("App");
     }
-
   }
 
   function changeGameAI(){
@@ -238,6 +249,15 @@ function App() {
       resetGame(); 
     }
   }
+
+ /*
+  ============================================
+  */
+
+  /*
+  The Following was done by: Jayden Johnson
+  ============================================
+  */
 
   // array of funny quotes for the loser
   const funnyQuotes = [
@@ -259,6 +279,12 @@ function App() {
 
   // randomly select a funny quote for the loser
   const randomQuote = funnyQuotes[Math.floor(Math.random() * funnyQuotes.length)];
+
+  /*
+  ============================================
+  */
+
+
 
   // renders the game components and scoreboard
   // the layout of the entire UI
